@@ -1,7 +1,7 @@
 (function( $ ) {
 	'use strict';
 	
-	var default_icons = [ 'fab fa-facebook', 'fab fa-twitter', 'fab fa-youtube', 'fab fa-tripadvisor', 'fab fa-linkedin', 'fab fa-instagram', 'fab fa-whatsapp', 'fas fa-envelope' ];
+	var default_icons = [ 'fab_fa-facebook', 'fab_fa-twitter', 'fab_fa-youtube', 'fab_fa-tripadvisor', 'fab_fa-linkedin', 'fab_fa-instagram', 'fab_fa-whatsapp', 'fas_fa-envelope' ];
 
 	var selected_icons = [];
 
@@ -32,12 +32,12 @@
 			var sel_icon = $(this).data('icon');
 
 			//prevent duplicates
-			if( ! selected_icons.includes( get_icon_id(sel_icon) ) ){
+			if( ! selected_icons.includes( sel_icon) ){
 
-				selected_icons.push( get_icon_id(sel_icon) );
+				selected_icons.push( sel_icon );
 
 				// add icon to selected icons section
-				add_to_selected_icons( sel_icon );
+				add_to_selected_icons( sel_icon.replace('_', ' ') );
 
 				$(this).addClass('selected');
 
@@ -110,6 +110,22 @@
 		})
 
 
+		$('body').on('change', '.color-picker', delay(function(){
+			// console.log($(this).val());
+
+			var $parent = $(this).parents('.icon-row');
+			var this_icon_id = $parent.data('icon');
+
+			console.log(this_icon_id);
+			// generate_stylesheet(this_icon_id);
+
+			// continue here --------------------------------------------
+
+
+
+		}, 500))
+
+
 
 		// on init
 		// first function to run
@@ -134,7 +150,16 @@
 				// generate default icons from object data
 				add_to_selected_icons(icon_obj.icon, icon_obj);
 
+				// add to selected icon array
+				if( ! selected_icons.includes( get_icon_id(icon_obj.icon)) ){
+					selected_icons.push( get_icon_id(icon_obj.icon) );
+				}
+
 			})
+
+
+			// mark icons as selected, if already selected
+			mark_icons_as_selected();
 
 
 		}
@@ -143,6 +168,8 @@
 		// genereate icon template
 		function generate_new_icons( icon_names ){
 
+			console.log(icon_names);
+
 			if( icon_names.length < 1 ){
 				$('#available-icons-container').html( '<p><strong>0 result found</strong></p>' );
 				return;	
@@ -150,8 +177,8 @@
 
 			var template = '';
 			icon_names.forEach( function(icon_name) {
-				template += '<a data-icon="' + get_icon_id(icon_name) + '" class="icon-wrapper" ><div class="icon-holder">';
-				template += '<i class="' + icon_name + '"></i>';
+				template += '<a data-icon="' + icon_name + '" class="icon-wrapper" ><div class="icon-holder">';
+				template += '<i class="' + icon_name.replace('_', ' ') + '"></i>';
 				template += '</div></a>';
 			});
 
@@ -166,7 +193,7 @@
 		function filterItems(needle, heystack) {
 			var query = needle.toLowerCase();
 			var return_data = [];
-			if( query.length < 1 ) return false;
+			if( query.length < 1 ) return_false;
 			heystack.filter(function(item) {
 				if( return_data.length > 43 ) return return_data;
 				if(item.toLowerCase().indexOf(query) >= 0 ){
@@ -245,11 +272,8 @@
 			
 		}
 
-		function generate_stylesheet(icon){
-			// var template = '<style>';
-			// 	template += '.icon-row[data' + icon.replace(' ', '_') +'"';
-			// 	template += '</style>';
-			// $('head').append( '<style></style>' );
+		function generate_stylesheet(icon_id, styles){
+			var template = '<style id="'+ icon_id +'">' + styles + '</style>';
 		}
 
 		function get_icon_id(icon){
@@ -261,7 +285,7 @@
 
 			$('#available-icons-container a').each(function(){
 
-				if( selected_icons.includes( get_icon_id( $(this).data('icon') ) ) ){
+				if( selected_icons.includes(  $(this).data('icon')  ) ){
 					$(this).addClass('selected');
 				}
 				
