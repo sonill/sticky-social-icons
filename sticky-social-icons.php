@@ -36,6 +36,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Rename this for your plugin and update it as you release new versions.
  */
 define( 'STICKY_SOCIAL_ICONS_VERSION', '1.0.0' );
+define( 'STICKY_SOCIAL_ICONS_DB_INITIALS', 'sanil_ssi_db_' );
 
 /**
  * The code that runs during plugin activation.
