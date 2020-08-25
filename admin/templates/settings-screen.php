@@ -40,7 +40,7 @@
                 <!-- generate nonce -->
                 <?php  settings_fields("sticky_social_icons_icons"); ?>
 
-                <div class="section mb-50" >
+                <div class="section" >
                     <!-- display form fields -->
                     <?php do_settings_sections($this->settings_page_slug.'-icons'); ?>
                 </div>
@@ -53,7 +53,7 @@
                     <div class="section-contents">
                         
                         <div class="icons-search-wrapper">
-                            <input type="text" name="icon_search" placeholder="<?php _e('Type icon name here to search', 'sticky-social-icons');?>" id="icon-search" >
+                            <input type="text" name="icon_search" placeholder="<?php _e('Click here to search for more icons ', 'sticky-social-icons');?>" id="icon-search" >
                         </div> <!--icon-search-wrapper-->
 
                         <p><strong><?php _e( 'Click on icon to select', 'sticky-social-icons');?></strong></p>

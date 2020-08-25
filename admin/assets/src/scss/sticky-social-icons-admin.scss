@@ -67,25 +67,23 @@ $thumbnail_height : 48px;
     }
 
     .icons-search-wrapper{
-        padding: 4px 6px;
         background: #F6F6F6 url(../../images/search.svg) no-repeat;
         background-position: calc( 100% - 13px ) 9px;
-        border: solid 1px #B0CFE1;
         margin-bottom: 20px;
-
+        
         input{
+            padding: 4px 45px 4px 10px;
+            border: solid 1px #B0CFE1;
             background: transparent;
             font-size: 16px;
             color: #000;
             font-family: roboto;
             font-weight: 300;
-            border: none;
-            width: calc( 100% - 42px )
+            border-radius: 0;
+            // width: calc( 100% - 42px )
+            width: 100%;
         }
 
-        input:focus, input:active{
-            box-shadow: none;
-        }
     }
 }
 
@@ -117,17 +115,6 @@ $thumbnail_height : 48px;
         }
 
         
-
-        // .label{
-        //     font-size: 12px;
-        //     text-align: center;
-        //     color: #909090;
-        //     white-space: nowrap;
-        //     overflow: hidden;
-        //     text-overflow: ellipsis;
-        //     width: 100%;
-        // }
-
         &:hover, &.selected{
             cursor: pointer;
     
@@ -140,12 +127,18 @@ $thumbnail_height : 48px;
                 color: #00A7F6;
             }
         }
+
+        &.selected{
+            cursor: not-allowed;
+        }
     }
 
 }
 
 
 #selected-icons-container{
+    margin-bottom: -20px;
+
     .icon-row{
 
         overflow: hidden;
@@ -172,7 +165,7 @@ $thumbnail_height : 48px;
 
         }
 
-        button.drag, button.remove-item-btn, button.more-options-btn{
+        .drag, button.remove-item-btn, button.more-options-btn{
             cursor: pointer;
             height: 38px;
             position: relative;
@@ -181,7 +174,7 @@ $thumbnail_height : 48px;
             margin-right: 25px;
         }
         
-        button.drag{
+        .drag{
             background: url(../../images/drag.svg) no-repeat center;
             display: block;
             border: none;

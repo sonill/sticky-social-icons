@@ -1,27 +1,29 @@
 (function( $ ) {
 	'use strict';
 	
-	var default_icons = [ 'fab_fa-facebook', 'fab_fa-twitter', 'fab_fa-youtube', 'fab_fa-tripadvisor', 'fab_fa-linkedin', 'fab_fa-instagram', 'fab_fa-whatsapp', 'fas_fa-envelope' ];
+	// ssi_icons contains list of fontawesome icon names
 
 	var selected_icons = [];
+	var default_style_rules = {
+		facebook: 	['#fff', '#fff', '#1e73be', '#1e73be'],
+		twitter: 	['#fff', '#fff', '#00bde2', '#00bde2'],
+		youtube: 	['#fff', '#fff', '#e51b1b', '#e51b1b'],
+		pinterest: 	['#fff', '#fff', '#c62929', '#c62929'],
+		envelope: 	['#fff', '#fff', '#ea8a35', '#d17030'],
+		whatsapp: 	['#fff', '#fff', '#8abc3a', '#4cd140'],
+		linkedin: 	['#fff', '#fff', '#63dfe8', '#63dfe8'],
+		instagram: 	['#fff', '#fff', '#e878e8', '#e878e8'],
+		skype: 		['#fff', '#fff', '#39b9ef', '#39b9ef'],
+	};
 
 	$(document).ready(function(){
 
 		init();
 
-
-		//search
+		// search
 		$('#icon-search').keyup( delay( function(){
 			var query = $.trim( $(this).val() );
-
-			if( query.length < 1 ){
-				// show default icons
-				generate_new_icons( default_icons );
-			}
-			else{
-				generate_new_icons( filterItems( query, ssi_icons ) );
-			}
-
+			generate_new_icons( filterItems( query, ssi_icons ) );
 
 		}, 500 ) );
 
@@ -45,7 +47,6 @@
 		})
 
 
-
 		// show / hide .more-options-container
 		$('body').on('click', 'button.more-options-btn', function(){
 			var $sibling = $(this).siblings('.more-options-container');
@@ -62,16 +63,30 @@
 		// hide .more-options-container
 		$('body').on('click', 'button.close-moc', function(){
 			$(this).parents('.more-options-container').slideUp();
-			
 		})
 
 		
 		// remove item from selected icons list
 		$('body').on('click', '.remove-item-btn', function(){
 			var $this_parents = $(this).parents('.icon-row');
+			var icon_id = $this_parents.data('icon');
+
+			// remove from dom with animation
 			$this_parents.slideUp('fast', function(){
 				$this_parents.remove();
 			});
+
+
+			// remove from selected_icons array
+			for( var i = 0; i < selected_icons.length; i++ ){
+				if( selected_icons[i] == icon_id ){
+					selected_icons.splice(i, 1);
+				}
+			}
+
+			// mark icon as not selected from "available icon" section
+			$('.icon-wrapper.selected[data-icon="'+ icon_id +'"]').removeClass('selected');
+
 		})
 
 
@@ -109,21 +124,27 @@
 
 		})
 
-
+		
+		// on color change
 		$('body').on('change', '.color-picker', delay(function(){
-			// console.log($(this).val());
 
-			var $parent = $(this).parents('.icon-row');
-			var this_icon_id = $parent.data('icon');
+			var $parent 	= $(this).parents('.icon-row');
+			var icon_id		= $parent.data('icon');
+			
+			// generaete styles for preview
+			generate_stylesheet(
+				icon_id, 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color').val(), 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color-hover').val(), 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.bck-color').val(), 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.bck-color-hover').val()
+			);
 
-			console.log(this_icon_id);
-			// generate_stylesheet(this_icon_id);
-
-			// continue here --------------------------------------------
+		}, 200))
 
 
-
-		}, 500))
+		// jquery sortable
+		$('#selected-icons-container').sortable().disableSelection();
 
 
 
@@ -132,10 +153,9 @@
 		function init(){
 
 			// show default icons
-			generate_new_icons( default_icons );
+			generate_new_icons( filterItems( '', ssi_icons )  );
 
 			// if values exists in db
-			// currently, it is in string type
 			var selected_icons_from_db = sanil_ssi_objects.selected_icons_from_db;
 			if( selected_icons_from_db.length ){
 				// convert into object
@@ -148,27 +168,32 @@
 				var icon_obj = JSON.parse(selected_icons_from_db[index]);
 
 				// generate default icons from object data
-				add_to_selected_icons(icon_obj.icon, icon_obj);
+				add_to_selected_icons(icon_obj.icon, icon_obj, false);
 
 				// add to selected icon array
 				if( ! selected_icons.includes( get_icon_id(icon_obj.icon)) ){
 					selected_icons.push( get_icon_id(icon_obj.icon) );
 				}
 
-			})
+				// generate styles for icon preview
+				generate_stylesheet(
+					get_icon_id(icon_obj.icon), 
+					icon_obj.icon_color,
+					icon_obj.icon_color_on_hover,
+					icon_obj.bck_color,
+					icon_obj.bck_color_on_hover
+				);
 
+			})
 
 			// mark icons as selected, if already selected
 			mark_icons_as_selected();
-
 
 		}
 
 
 		// genereate icon template
 		function generate_new_icons( icon_names ){
-
-			console.log(icon_names);
 
 			if( icon_names.length < 1 ){
 				$('#available-icons-container').html( '<p><strong>0 result found</strong></p>' );
@@ -193,7 +218,7 @@
 		function filterItems(needle, heystack) {
 			var query = needle.toLowerCase();
 			var return_data = [];
-			if( query.length < 1 ) return_false;
+			// if( query.length < 1 ) return_false;
 			heystack.filter(function(item) {
 				if( return_data.length > 43 ) return return_data;
 				if(item.toLowerCase().indexOf(query) >= 0 ){
@@ -220,28 +245,57 @@
 
 
 		// generate markup and append to dom
-		function add_to_selected_icons( icon, icon_obj ){
+		function add_to_selected_icons( icon, icon_obj, scroll_down ){
 
 			if(icon_obj === undefined ){
-				icon_obj = {
-					url: '',
-					icon: icon,
-					new_tab: 1,
-					icon_color: '#000',
-					icon_color_on_hover: '#fff',
-					bck_color: '#fff',
-					bck_color_on_hover: '#000'
-				};
+
+				var got_styles_from_global_rules = 0;
+
+				// try to get default styles from global "default_style_rules" object
+				Object.keys(default_style_rules).forEach(function(index){
+					if( icon.includes(index ) ){
+						var styles = default_style_rules[index];
+
+						icon_obj = {
+							url: '',
+							icon: icon,
+							new_tab: 1,
+							icon_color: styles[0],
+							icon_color_on_hover: styles[1],
+							bck_color: styles[2],
+							bck_color_on_hover: styles[3]
+						};
+
+						got_styles_from_global_rules = 1;
+
+					}
+				});
+
+
+				if( ! got_styles_from_global_rules ){
+
+					// create default styles
+					icon_obj = {
+						url: '',
+						icon: icon,
+						new_tab: 1,
+						icon_color: '#000',
+						icon_color_on_hover: '#fff',
+						bck_color: '#fff',
+						bck_color_on_hover: '#000'
+					};
+					
+				}
+
 			}
 
 			var is_checked = (icon_obj.new_tab == 1) ? 'checked' : '';
 
-
 			// show parent container
 			$('#selected-icons-section').show();
 
-			var template = '<div class="icon-row" data-icon="'+ get_icon_id(icon) +'">';
-				template += '<button type="button" class="drag" title="' + sanil_ssi_objects.text_drag_msg +'">' + sanil_ssi_objects.text_drag +'</button>';
+			var template = '<div class="icon-row ui-state-default" data-icon="'+ get_icon_id(icon) +'">';
+				template += '<div class="drag" title="' + sanil_ssi_objects.text_drag_msg +'">' + sanil_ssi_objects.text_drag +'</div>';
 				template += '<div class="icon-holder"><i class="' + icon + '"></i></div>';
 				template += '<input type="text" name="url_input" class="url-input" placeholder="' + sanil_ssi_objects.text_url_to_open +'" value="'+ icon_obj.url +'">';
 				template += '<input type="hidden" name="icon" class="selected-icon" value="' + icon + '" >';
@@ -252,16 +306,21 @@
 				template += '<div class="form-group"><label>' + sanil_ssi_objects.text_open_in_new_tab +'</label><div class="moc-input-wrapper"><input type="checkbox" value="1" name="open_in_new_tab" '+ is_checked +'></div></div>';
 				template += '<div class="form-group"><label>' + sanil_ssi_objects.text_colors +'</label>';
 				template += '<div class="moc-input-wrapper has-color-picker">';
-				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_icon_color +'</p><input type="text" value="'+ icon_obj.icon_color +'" name="icon_color"  class="color-picker" data-alpha="true"></div>';
-				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_icon_color_on_hover +'</p><input type="text" value="'+ icon_obj.icon_color_on_hover +'" name="icon_color_on_hover"  class="color-picker" data-alpha="true"></div>';
-				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_bck_color +'</p><input type="text" value="'+ icon_obj.bck_color +'" name="bck_color"  class="color-picker" data-alpha="true"></div>';
-				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_bck_color_on_hover +'</p><input type="text" value="'+ icon_obj.bck_color_on_hover +'" name="bck_color_on_hover"  class="color-picker" data-alpha="true"></div>';
+				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_icon_color +'</p><input type="text" value="'+ icon_obj.icon_color +'" name="icon_color"  class="color-picker icon-color" data-alpha="true"></div>';
+				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_icon_color_on_hover +'</p><input type="text" value="'+ icon_obj.icon_color_on_hover +'" name="icon_color_on_hover"  class="color-picker icon-color-hover" data-alpha="true"></div>';
+				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_bck_color +'</p><input type="text" value="'+ icon_obj.bck_color +'" name="bck_color"  class="color-picker bck-color" data-alpha="true"></div>';
+				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_bck_color_on_hover +'</p><input type="text" value="'+ icon_obj.bck_color_on_hover +'" name="bck_color_on_hover"  class="color-picker bck-color-hover" data-alpha="true"></div>';
 				template += '</div></div></div></div>';
 
 			$('#selected-icons-container').append(template);
 
-			// scroll down
-			$("html, body").animate({ scrollTop: $(document).height() }, 500 );
+
+			if( scroll_down != false ){
+
+				// scroll down
+				$("html, body").animate({ scrollTop: $(document).height() }, 500 );
+
+			}
 
 			// delay for smoother animation
 			setTimeout(function(){
@@ -272,8 +331,29 @@
 			
 		}
 
-		function generate_stylesheet(icon_id, styles){
-			var template = '<style id="'+ icon_id +'">' + styles + '</style>';
+		function generate_stylesheet(icon_id, icon_color, icon_color_hover, bck_color, bck_color_hover){
+
+			var styles 		= '';
+
+			// normal state
+			styles += '.icon-row[data-icon="'+ icon_id + '"] .icon-holder{ ';
+			styles += 'color: '+ icon_color  + ' !important; ';
+			styles += 'background: '+ bck_color  + ' !important; ';
+			styles += '}';
+
+			// hover state
+			styles += '.icon-row[data-icon="'+ icon_id + '"] .icon-holder:hover{ ';
+			styles += 'color: '+ icon_color_hover  + ' !important; ';
+			styles += 'background: '+ bck_color_hover  + ' !important; ';
+			styles += '}';
+
+			if( $('#'+ icon_id +'-styles').length ) {
+				$('#'+ icon_id +'-styles').html( styles );
+			}
+			else{
+				$('head').append( '<style id="'+ icon_id +'-styles">' + styles + '</style>' );
+			}
+
 		}
 
 		function get_icon_id(icon){

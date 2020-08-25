@@ -103,7 +103,7 @@ class Sticky_Social_Icons_Admin {
 			wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'assets/build/js/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ) );
 
 			// use wp-color-picker-alpha as dependency
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/build/js/sticky-social-icons-admin.min.js', array('jquery'), time() );
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/build/js/sticky-social-icons-admin.min.js', array('jquery', 'jquery-ui-sortable' ), time() );
 
 
 			wp_localize_script( 
