@@ -141,24 +141,6 @@
 		})
 
 		
-		// on color change
-		$body.on('change', '.color-picker', delay(function(){
-
-			var $parent 	= $(this).parents('.icon-row');
-			var icon_id		= $parent.data('icon');
-			
-			// generate styles for preview
-			generate_stylesheet(
-				icon_id, 
-				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color').val(), 
-				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color-hover').val(), 
-				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.bck-color').val(), 
-				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.bck-color-hover').val()
-			);
-
-		}, 200))
-
-
 		// jquery sortable
 		$('#selected-icons-container').sortable().disableSelection();
 
@@ -194,6 +176,8 @@
 				}
 
 				// generate <style> for icon preview and insert into <head>
+
+				
 				generate_stylesheet(
 					get_icon_id(icon_obj.icon), 
 					icon_obj.icon_color,
@@ -353,7 +337,6 @@
 
 				template += '<button type="button" class="remove-item">Remove Icon</button>';
 
-
 				template += '</div></div>';
 
 			$('#selected-icons-container').append(template);
@@ -366,10 +349,18 @@
 			}
 
 
+			// generate styles
+			on_color_change( '.icon-row[data-icon="'+  get_icon_id(icon) +'"] .url-input');
+
+
 			// delay for smoother animation
 			setTimeout(function(){
-				// initiate wp color picker
-				$('.icon-row .color-picker').wpColorPicker();
+				// initialize wp color picker
+				$('.icon-row .color-picker').wpColorPicker({
+					change: function(event, ui){
+						on_color_change(event.target);
+					}
+				});
 			}, 500)
 
 		}
@@ -415,6 +406,21 @@
 				}
 				
 			})
+		}
+
+
+		function on_color_change(sel){
+			var $parent 	= $(sel).parents('.icon-row');
+			var icon_id		= $parent.data('icon');
+			
+			// generate styles for preview
+			generate_stylesheet(
+				icon_id, 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color').val(), 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color-hover').val(), 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.bck-color').val(), 
+				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.bck-color-hover').val()
+			);
 		}
 
 		function is_mobile(){
