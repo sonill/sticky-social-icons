@@ -35,23 +35,21 @@ Note: Sticky Social Icons is not a sharing plugin.
 
 == Installation ==
 
-This section describes how to install the plugin and get it working.
-
-e.g.
-
-1. Upload `sticky-social-icons.php` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Place `<?php do_action('plugin_name_hook'); ?>` in your templates
+1.  Download the plugin .zip file and make note of where on your computer you downloaded it to.
+2.  In the WordPress admin (example.com/wp-admin) go to Plugins > Add New or click the “Add New” button on the main plugins screen.
+3.  On the following screen, click the “Upload Plugin” button.
+4.  Browse your computer to where you downloaded the plugin .zip file, select it and click the “Install Now” button.
+5.  After the plugin has successfully installed, click “Activate Plugin” and enjoy!
 
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= Which Icon Packages are supported ? =
 
-An answer to that question.
+Currently only Font Awesome - Free version is supported. More Icon Package will be added in future updates.
 
-= What about foo bar? =
+= Where can I ask for help ? =
 
-Answer to foo bar dilemma.
+You can go to the "Support"  section of the plugin in wordpress.org and create a new topic. I will try my best to help you resolve your problem.
 
 == Screenshots ==
 
