@@ -29,8 +29,19 @@ class Sticky_Social_Icons_Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
+	 
 	public static function deactivate() {
 
+		$all_option_names = get_option( 'sanil_ssi_db_all_options_names' );
+		if( !empty($all_option_names) ){
+			$all_option_names = unserialize($all_option_names);
+
+			foreach($all_option_names as $option_name ){
+				delete_option( $option_name );
+			}
+		}
+
+		delete_option( 'sanil_ssi_db_all_options_names' );
 	}
 
 }

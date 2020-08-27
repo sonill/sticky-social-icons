@@ -4,6 +4,7 @@
 	// ssi_icons contains list of fontawesome icon names
 
 	var selected_icons 		= [],
+		$body,
 		default_style_rules = {
 			facebook: 	['#fff', '#fff', '#1e73be', '#194da8'],
 			twitter: 	['#fff', '#fff', '#00bde2', '#0097ce'],
@@ -19,6 +20,10 @@
 	
 	$(document).ready(function(){
 
+
+		$body = $('body');
+
+
 		// initialize starter function
 		init();
 
@@ -30,7 +35,7 @@
 
 
 		// on icon click
-		$('body').on('click', '.icon-wrapper', function(){
+		$body.on('click', '.icon-wrapper', function(){
 
 			var sel_icon = $(this).data('icon');
 
@@ -49,7 +54,7 @@
 
 
 		// show / hide .more-options-container
-		$('body').on('click', 'button.more-options-btn', function(){
+		$body.on('click', 'button.more-options-btn', function(){
 			var $sibling = $(this).siblings('.more-options-container');
 
 			if( $sibling.is(":visible") ){
@@ -62,13 +67,13 @@
 
 
 		// hide .more-options-container
-		$('body').on('click', 'button.close-moc', function(){
+		$body.on('click', 'button.close-moc', function(){
 			$(this).parents('.more-options-container').slideUp();
 		})
 
 		
 		// remove item from selected icons list
-		$('body').on('click', '.remove-item-btn', function(){
+		$body.on('click', '.remove-item', function(){
 			var $this_parents = $(this).parents('.icon-row');
 			var icon_id = $this_parents.data('icon');
 
@@ -137,7 +142,7 @@
 
 		
 		// on color change
-		$('body').on('change', '.color-picker', delay(function(){
+		$body.on('change', '.color-picker', delay(function(){
 
 			var $parent 	= $(this).parents('.icon-row');
 			var icon_id		= $parent.data('icon');
@@ -233,8 +238,12 @@
 			var query = needle.toLowerCase(),
 				return_data = [];
 
+			var return_limit = 44;
+
+			if( is_mobile() ) return_limit = 12;
+
 			heystack.filter(function(item) {
-				if( return_data.length > 43 ) return return_data;
+				if( return_data.length >= return_limit ) return return_data;
 				if(item.toLowerCase().indexOf(query) >= 0 ){
 					return_data.push(item);
 				}
@@ -320,7 +329,7 @@
 				template += '<input type="text" name="url_input" class="url-input" placeholder="' + sanil_ssi_objects.text_url_to_open +'" value="'+ icon_obj.url +'">';
 				template += '<input type="hidden" name="icon" class="selected-icon" value="' + icon + '" >';
 				template += '<button type="button" class="more-options-btn '+ show_flashing +'">' + sanil_ssi_objects.text_more_options  +'</button>';
-				template += '<button type="button" class="remove-item-btn">' + sanil_ssi_objects.text_remove  +'</button>';
+				template += '<button type="button" class="remove-item remove-item-btn">' + sanil_ssi_objects.text_remove  +'</button>';
 				
 				template += '<div class="error-msg">URL should start with <strong>http://</strong> or <strong>https://</strong> or <strong>mailto:</strong></div>';
 				
@@ -339,7 +348,13 @@
 				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_icon_color_on_hover +'</p><input type="text" value="'+ icon_obj.icon_color_on_hover +'" name="icon_color_on_hover"  class="color-picker icon-color-hover" data-alpha="true"></div>';
 				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_bck_color +'</p><input type="text" value="'+ icon_obj.bck_color +'" name="bck_color"  class="color-picker bck-color" data-alpha="true"></div>';
 				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_bck_color_on_hover +'</p><input type="text" value="'+ icon_obj.bck_color_on_hover +'" name="bck_color_on_hover"  class="color-picker bck-color-hover" data-alpha="true"></div>';
-				template += '</div></div></div></div>';
+				
+				template += '</div></div>';
+
+				template += '<button type="button" class="remove-item">Remove Icon</button>';
+
+
+				template += '</div></div>';
 
 			$('#selected-icons-container').append(template);
 
@@ -400,6 +415,10 @@
 				}
 				
 			})
+		}
+
+		function is_mobile(){
+			return ( $(window).width() < 768  ? true : false );
 		}
 
 	});

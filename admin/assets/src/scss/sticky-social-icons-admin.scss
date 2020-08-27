@@ -3,6 +3,14 @@ $padding: 15px;
 $thumbnail_height : 48px;
 
 
+.end-label{
+    margin-top: 6px;
+}
+
+#sanil_ssi_db_selected_icons{
+    display: none !important;
+}
+
 #settings-tabs{
     background: #B8B8B8;
     border:solid 1px #929292;
@@ -45,6 +53,8 @@ $thumbnail_height : 48px;
 #settings-wrapper{
     input.number{
         width: 75px;
+        float: left;
+        margin-right: 5px;
     }
 
     [type=checkbox]{
@@ -68,6 +78,7 @@ $thumbnail_height : 48px;
         .section-contents{
             background: #fff;
             padding: 20px;
+            overflow-x: auto;
         }
         
     }
@@ -144,6 +155,7 @@ $thumbnail_height : 48px;
 
 #selected-icons-container{
     margin-bottom: -20px;
+    // min-width: 505px;
 
     .error-msg{
         color: red;
@@ -152,6 +164,8 @@ $thumbnail_height : 48px;
         padding: 0 0 15px;
         display: none;
     }
+
+    
 
     .icon-row{
 
@@ -345,8 +359,62 @@ $thumbnail_height : 48px;
                 font-weight: 600;
             }
         }
+
+        button.remove-item{
+            display: none;
+        }
     }
 
-   
-
 }
+
+
+@media(max-width: 767px){
+    #selected-icons-container {
+
+        .icon-row {
+            .url-input, button.more-options-btn{
+                width: calc( 100vw - 185px);
+                margin: 0 0 10px;
+            }
+
+            .remove-item-btn{
+                display: none;
+            }
+
+        }
+
+        .error-msg{
+            margin: 0;
+        }
+
+        .more-options-container{
+            width: calc(100vw - 82px);
+            margin: 0;
+            padding: 0 10px;
+
+            label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+
+            .moc-input-wrapper{
+                margin-top: 6px;
+                width: 100%;
+            }
+
+            button.remove-item{
+                margin: 0 0 15px;
+                display: block;
+                width: 100%;
+                padding: 7px 0;
+            }
+
+        }
+
+    }
+
+
+    
+}
+
+

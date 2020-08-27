@@ -122,6 +122,7 @@ class Sticky_Social_Icons_Public {
 		$icons_data 		= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'selected_icons' );
 		$design 			= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'design', 'rounded' );
 		$alignment 			= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'alignment', 'left' );
+		$hide_in_mobile 			= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'hide_in_mobile', 'left' );
 		$enable_animation 	= $this->enable_animation;
 		$enable_tooltip 	= $this->enable_tooltip;
 

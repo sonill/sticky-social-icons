@@ -45,9 +45,20 @@ class Sticky_Social_Icons_Admin {
 	 *
 	 * @since    1.0.0
 	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
+	 * @var      string    $settings_page_slug    
 	 */
-	 private $settings_page_slug = 'sticky-social-icons';
+	private $settings_page_slug = 'sticky-social-icons';
+
+
+	/**
+	 * Store names of all the option fields used by this plugin
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      array    $all_used_db_field_names    
+	 */
+	 private $all_used_db_field_names;
+
 
 	/**
 	 * Initialize the class and set its properties.
@@ -56,6 +67,7 @@ class Sticky_Social_Icons_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
+
 	public function __construct( $plugin_name, $version ) {
 
 		$this->plugin_name = $plugin_name;
@@ -400,8 +412,13 @@ class Sticky_Social_Icons_Admin {
 			)
 		);
 
+		
+
 		// create settings fields
 		$this->create_settings( $settings_args );
+
+		// store all_used_db_field_names as option for future use
+		update_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'all_options_names', serialize( $this->all_used_db_field_names ) );
 		
 	}
 
@@ -426,6 +443,8 @@ class Sticky_Social_Icons_Admin {
 				register_setting( $args['settings_group_name'],  $sub_field['name'], array(
         			'sanitize_callback' => isset($sub_field['sanitize_callback']) ? array( $this, $sub_field['sanitize_callback'] ) : 'sanitize_text_field'
 				));
+
+				$this->all_used_db_field_names[] = $sub_field['name'] ;
 			}
 
 		}

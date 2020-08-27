@@ -1,6 +1,6 @@
 <div 
     id="sticky-social-icons-container" 
-    class="<?php echo 'design-' . $design .' alignment-' . $alignment; if($enable_animation) echo ' with-animation'; ?>"
+    class="<?php echo 'design-' . $design .' alignment-' . $alignment; if($enable_animation) echo ' with-animation'; if($hide_in_mobile) echo ' hide-in-mobile'; ?>"
 >
     <ul>
         <?php
