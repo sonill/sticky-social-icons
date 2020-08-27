@@ -118,9 +118,7 @@ class Sticky_Social_Icons_Admin {
 				
 				wp_enqueue_script( 'fontawesome_icon_names', plugin_dir_url( __FILE__ ) . 'assets/build/js/fontawesome_icons.js', array('jquery'), $this->version );
 				
-				wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'assets/build/js/wp-color-picker-alpha.min.js', array( 'wp-color-picker' ) );
-				
-				wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/build/js/sticky-social-icons-admin.min.js', array('jquery', 'jquery-ui-sortable' ), $this->version );
+				wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/build/js/sticky-social-icons-admin.min.js', array('jquery', 'wp-color-picker', 'jquery-ui-sortable' ), $this->version );
 
 				wp_localize_script( 
 					$this->plugin_name, 
