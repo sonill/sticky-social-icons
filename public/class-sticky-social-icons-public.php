@@ -20,6 +20,7 @@
  * @subpackage Sticky_Social_Icons/public
  * @author     Sanil Shakya <sanilshakya@gmail.com>
  */
+
 class Sticky_Social_Icons_Public {
 
 	/**
@@ -40,6 +41,25 @@ class Sticky_Social_Icons_Public {
 	 */
 	private $version;
 
+
+	/**
+	 * Enable Tooltip
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $enable_tooltip    
+	 */
+	private $enable_tooltip;
+
+	 /**
+	 * Enable Animation
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $enable_animation    
+	 */
+	private $enable_animation;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -52,6 +72,10 @@ class Sticky_Social_Icons_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+		if(  ! is_admin() ){
+			$this->enable_tooltip = get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'enable_tooltip', 1);
+			$this->enable_animation = get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'enable_animation', 1);
+		}
 	}
 
 	/**
@@ -61,19 +85,18 @@ class Sticky_Social_Icons_Public {
 	 */
 	public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Sticky_Social_Icons_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Sticky_Social_Icons_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+		if( is_rtl() ){
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/build/css/sticky-social-icons-public-rtl.css', array(), $this->version, 'all' );
+		}
+		else{
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'assets/build/css/sticky-social-icons-public.css', array(), $this->version, 'all' );
+		}
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/sticky-social-icons-public.css', array(), $this->version, 'all' );
+
+		if( get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'load_fontawesome_icons', 1) ){
+			// fontawesome5
+			wp_enqueue_style( 'font-awesome', '//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css' );
+		}
 
 	}
 
@@ -83,21 +106,79 @@ class Sticky_Social_Icons_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
+	}
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Sticky_Social_Icons_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Sticky_Social_Icons_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/sticky-social-icons-public.js', array( 'jquery' ), $this->version, false );
 
+	/**
+	 * Output contents for front end website
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function show_template(){
+		ob_start();
+
+		$icons_data 		= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'selected_icons' );
+		$design 			= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'design', 'rounded' );
+		$alignment 			= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'alignment', 'left' );
+		$enable_animation 	= $this->enable_animation;
+		$enable_tooltip 	= $this->enable_tooltip;
+
+		if( $icons_data ){
+			require_once dirname( __FILE__ ) . '/templates/' . $this->plugin_name .'-template.php';
+		}
+
+		echo ob_get_clean();
+	}
+
+
+	/**
+	 * Generate <style> tag and output to <head> of the front end website
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function generate_styles(){
+		$icons_data = get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'selected_icons' );
+
+		$styles_markup = '<style id="'. $this->plugin_name .'-styles">';
+
+		if( $icons_data ){
+			
+			$offset_from_top		  	= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'offset_from_top', STICKY_SOCIAL_ICONS_DEFAULTS[0] );
+			$icon_font_size 			= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'icon_font_size', STICKY_SOCIAL_ICONS_DEFAULTS[1] );
+			$icon_padding_horizontal 	= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'icon_padding_horizontal', STICKY_SOCIAL_ICONS_DEFAULTS[2] );
+			$icon_padding_vertical 		= get_option( STICKY_SOCIAL_ICONS_DB_INITIALS . 'icon_padding_vertical', STICKY_SOCIAL_ICONS_DEFAULTS[3] );
+
+			$styles_markup 		.= '#sticky-social-icons-container{';
+				$styles_markup .= 'top: ' . $offset_from_top .'px';
+			$styles_markup 		.= '}';
+
+			$styles_markup 		.= '#sticky-social-icons-container li a{';
+				$styles_markup .= 'font-size: ' . $icon_font_size .'px; ';
+				$styles_markup .= 'padding: ' . $icon_padding_vertical .'px' .' '. $icon_padding_horizontal .'px; ';
+			$styles_markup 		.= '}';
+
+			foreach( json_decode( $icons_data ) as $icon ){
+				$single_icon = json_decode( $icon );
+
+				$styles_markup 		.= '#sticky-social-icons-container li a.'. str_replace(' ', '-', $single_icon->icon) .'{';
+					$styles_markup .= 'color: ' . $single_icon->icon_color .'; ';
+					$styles_markup .= 'background: ' . $single_icon->bck_color .'; ';
+				$styles_markup 		.= '}';
+
+				$styles_markup 		.= '#sticky-social-icons-container li a.'. str_replace(' ', '-', $single_icon->icon) .':hover{';
+					$styles_markup .= 'color: ' . $single_icon->icon_color_on_hover .'; ';
+					$styles_markup .= 'background: ' . $single_icon->bck_color_on_hover .'; ';
+				$styles_markup 		.= '}';
+			}
+		}
+
+		$styles_markup .= '</style>';
+
+		echo $styles_markup;
+		
 	}
 
 }

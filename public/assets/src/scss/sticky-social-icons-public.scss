@@ -1,0 +1,76 @@
+@import 'node_modules/microtip/microtip';
+
+#sticky-social-icons-container{
+    position: fixed;
+    z-index: 999;
+    // box-shadow: 0 1px 6px 0px #0000004d;
+    text-align: center;
+    // overflow: hidden;
+
+    ul, li{
+        margin: 0;
+        padding: 0;
+    }
+    
+    li{
+        list-style: none;
+
+        a{
+            display: block;
+            transition: 0.1s;
+            transition-timing-function: linear;
+        }
+
+    }
+}
+
+#sticky-social-icons-container.design-rounded.alignment-left {
+
+    li:first-child a{
+        border-radius: 0 5px 0 0;
+    }
+
+    li:last-child a{
+        border-radius: 0 0 5px 0;
+    }
+
+    li a:hover{
+        border-radius: 0 5px 5px 0 !important;
+    }
+}
+
+#sticky-social-icons-container.design-rounded.alignment-right{
+    li:first-child a{
+        border-radius: 5px 0 0 0;
+    }
+
+    li:last-child a{
+        border-radius: 0 0 0 5px;
+    }
+
+    li a:hover{
+        border-radius: 5px 0 0 5px !important;
+    }
+}
+
+#sticky-social-icons-container.alignment-left{
+    left: 0;
+}
+
+#sticky-social-icons-container.alignment-right{
+    right: 0;
+}
+
+
+// enable animation
+#sticky-social-icons-container.alignment-left.with-animation{
+    li a:hover{
+        margin-right: -10px;
+    }
+}
+
+#sticky-social-icons-container.alignment-right.with-animation{
+    li a:hover{
+        margin-left: -10px;
+    }
+}

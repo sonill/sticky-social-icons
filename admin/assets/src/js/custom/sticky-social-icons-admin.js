@@ -3,28 +3,29 @@
 	
 	// ssi_icons contains list of fontawesome icon names
 
-	var selected_icons = [];
-	var default_style_rules = {
-		facebook: 	['#fff', '#fff', '#1e73be', '#1e73be'],
-		twitter: 	['#fff', '#fff', '#00bde2', '#00bde2'],
-		youtube: 	['#fff', '#fff', '#e51b1b', '#e51b1b'],
-		pinterest: 	['#fff', '#fff', '#c62929', '#c62929'],
-		envelope: 	['#fff', '#fff', '#ea8a35', '#d17030'],
-		whatsapp: 	['#fff', '#fff', '#8abc3a', '#4cd140'],
-		linkedin: 	['#fff', '#fff', '#63dfe8', '#63dfe8'],
-		instagram: 	['#fff', '#fff', '#e878e8', '#e878e8'],
-		skype: 		['#fff', '#fff', '#39b9ef', '#39b9ef'],
-	};
+	var selected_icons 		= [],
+		default_style_rules = {
+			facebook: 	['#fff', '#fff', '#1e73be', '#194da8'],
+			twitter: 	['#fff', '#fff', '#00bde2', '#0097ce'],
+			youtube: 	['#fff', '#fff', '#e51b1b', '#c41717'],
+			pinterest: 	['#fff', '#fff', '#c62929', '#af2424'],
+			envelope: 	['#fff', '#fff', '#ea8a35', '#d17030'],
+			whatsapp: 	['#fff', '#fff', '#8abc3a', '#4cd140'],
+			linkedin: 	['#fff', '#fff', '#2f82d6', '#4665a3'],
+			instagram: 	['#fff', '#fff', '#e878e8', '#ae78e8'],
+			skype: 		['#fff', '#fff', '#39b9ef', '#329cd1'],
+		};
 
+	
 	$(document).ready(function(){
 
+		// initialize starter function
 		init();
 
-		// search
+		// search icon
 		$('#icon-search').keyup( delay( function(){
 			var query = $.trim( $(this).val() );
 			generate_new_icons( filterItems( query, ssi_icons ) );
-
 		}, 500 ) );
 
 
@@ -89,28 +90,38 @@
 
 		})
 
-
+		
+		// main settings page form of wordpress
 		$('#sanil-ssi-form').on('submit', function(e){
 			e.preventDefault();
 
-			var selected_icon_data = {};
+			var selected_icon_data 	= {},
+				has_error			= false;
+
 			$('#selected-icons-container .icon-row').each(function(index){
-				var url = $('.url-input', this).val();
-				var icon = $('.selected-icon', this).val();
-				var new_tab = $('input[name="open_in_new_tab"]', this).val();
-				var icon_color = $('input[name="icon_color"]', this).val();
-				var icon_color_on_hover = $('input[name="icon_color_on_hover"]', this).val();
-				var bck_color = $('input[name="bck_color"]', this).val();
-				var bck_color_on_hover = $('input[name="bck_color_on_hover"]', this).val();
+
+				var icon = $('.selected-icon', this).val(),
+					url = $('.url-input', this).val();
+
+
+				// url field validation
+				if( url.substring(0, 4).toLowerCase() != 'http' && url.substring(0, 6).toLowerCase() != 'mailto'  ){
+					has_error = true;
+					$('.error-msg', this).show();
+				}
+				else{
+					$('.error-msg', this).hide();
+				}
 
 				selected_icon_data[index] =  JSON.stringify({
-					url: url,
-					icon: icon,
-					new_tab: new_tab,
-					icon_color: icon_color,
-					icon_color_on_hover: icon_color_on_hover,
-					bck_color: bck_color,
-					bck_color_on_hover: bck_color_on_hover
+					url: 					$('.url-input', this).val(),
+					icon: 					$('.selected-icon', this).val(),
+					new_tab: 				$('input[name="open_in_new_tab"]', this).prop("checked"),
+					tooltip_label: 			$('input[name="tooltip_label"]', this).val(),
+					icon_color: 			$('input[name="icon_color"]', this).val(),
+					icon_color_on_hover: 	$('input[name="icon_color_on_hover"]', this).val(),
+					bck_color: 				$('input[name="bck_color"]', this).val(),
+					bck_color_on_hover: 	$('input[name="bck_color_on_hover"]', this).val()
 				});
 
 			})
@@ -119,8 +130,8 @@
 			// insert icon options into selected icons input field
 			$('#sanil_ssi_db_selected_icons').attr( 'value', JSON.stringify(selected_icon_data) );
 
-			// submit form
-			$('#sanil-ssi-form')[0].submit();
+			// submit form if there are no errors
+			if( ! has_error ) $('#sanil-ssi-form')[0].submit();
 
 		})
 
@@ -131,7 +142,7 @@
 			var $parent 	= $(this).parents('.icon-row');
 			var icon_id		= $parent.data('icon');
 			
-			// generaete styles for preview
+			// generate styles for preview
 			generate_stylesheet(
 				icon_id, 
 				$('.icon-row[data-icon="'+ icon_id +'"] .color-picker.icon-color').val(), 
@@ -147,16 +158,17 @@
 		$('#selected-icons-container').sortable().disableSelection();
 
 
-
 		// on init
 		// first function to run
 		function init(){
 
-			// show default icons
+			// show default icons list in "available icons" section
 			generate_new_icons( filterItems( '', ssi_icons )  );
 
 			// if values exists in db
-			var selected_icons_from_db = sanil_ssi_objects.selected_icons_from_db;
+			// show icons in "selected icons" section from data received from database
+
+			var selected_icons_from_db =  $('#sanil_ssi_db_selected_icons').val();
 			if( selected_icons_from_db.length ){
 				// convert into object
 				selected_icons_from_db = JSON.parse(selected_icons_from_db);
@@ -164,6 +176,7 @@
 			
 			// loop though object to get inner object
 			Object.keys(selected_icons_from_db).forEach(function(index){
+
 				// get inner object
 				var icon_obj = JSON.parse(selected_icons_from_db[index]);
 
@@ -175,7 +188,7 @@
 					selected_icons.push( get_icon_id(icon_obj.icon) );
 				}
 
-				// generate styles for icon preview
+				// generate <style> for icon preview and insert into <head>
 				generate_stylesheet(
 					get_icon_id(icon_obj.icon), 
 					icon_obj.icon_color,
@@ -216,9 +229,10 @@
 
 		// search array 
 		function filterItems(needle, heystack) {
-			var query = needle.toLowerCase();
-			var return_data = [];
-			// if( query.length < 1 ) return_false;
+
+			var query = needle.toLowerCase(),
+				return_data = [];
+
 			heystack.filter(function(item) {
 				if( return_data.length > 43 ) return return_data;
 				if(item.toLowerCase().indexOf(query) >= 0 ){
@@ -247,13 +261,15 @@
 		// generate markup and append to dom
 		function add_to_selected_icons( icon, icon_obj, scroll_down ){
 
+			// if icon_obj is not available
 			if(icon_obj === undefined ){
 
 				var got_styles_from_global_rules = 0;
 
 				// try to get default styles from global "default_style_rules" object
 				Object.keys(default_style_rules).forEach(function(index){
-					if( icon.includes(index ) ){
+
+					if( icon.includes(index) ){
 						var styles = default_style_rules[index];
 
 						icon_obj = {
@@ -269,9 +285,10 @@
 						got_styles_from_global_rules = 1;
 
 					}
+
 				});
 
-
+				// if default styles was not generated from global style rules
 				if( ! got_styles_from_global_rules ){
 
 					// create default styles
@@ -289,7 +306,10 @@
 
 			}
 
-			var is_checked = (icon_obj.new_tab == 1) ? 'checked' : '';
+			var is_checked 		= (icon_obj.new_tab == true) ? 'checked' : '',
+				enable_tooltip	= sanil_ssi_objects.enable_tooltip,
+				show_flashing	= ( scroll_down != false ) ? 'flashing-anim' : '',
+				tooltip_value	= ( icon_obj.tooltip_label !== undefined && icon_obj.tooltip_label.length ) ? icon_obj.tooltip_label : ( icon.replace('fa-', '').replace('fas', '').replace('fab', '').replace('far', '') );
 
 			// show parent container
 			$('#selected-icons-section').show();
@@ -299,11 +319,20 @@
 				template += '<div class="icon-holder"><i class="' + icon + '"></i></div>';
 				template += '<input type="text" name="url_input" class="url-input" placeholder="' + sanil_ssi_objects.text_url_to_open +'" value="'+ icon_obj.url +'">';
 				template += '<input type="hidden" name="icon" class="selected-icon" value="' + icon + '" >';
-				template += '<button type="button" class="more-options-btn">' + sanil_ssi_objects.text_more_options  +'</button>';
+				template += '<button type="button" class="more-options-btn '+ show_flashing +'">' + sanil_ssi_objects.text_more_options  +'</button>';
 				template += '<button type="button" class="remove-item-btn">' + sanil_ssi_objects.text_remove  +'</button>';
+				
+				template += '<div class="error-msg">URL should start with <strong>http://</strong> or <strong>https://</strong> or <strong>mailto:</strong></div>';
+				
 				template += '<div class="more-options-container" style="display: none;">';
 				template += '<h4 class="title">' + sanil_ssi_objects.text_more_options +'<button type="button" class="close-moc">' + sanil_ssi_objects.text_close +'</button></h4>';
+
 				template += '<div class="form-group"><label>' + sanil_ssi_objects.text_open_in_new_tab +'</label><div class="moc-input-wrapper"><input type="checkbox" value="1" name="open_in_new_tab" '+ is_checked +'></div></div>';
+				
+				if( enable_tooltip ){
+					template += '<div class="form-group"><label>' + sanil_ssi_objects.text_tooltip_label +'</label><div class="moc-input-wrapper"><input type="text" value="' + tooltip_value +'" name="tooltip_label" class="tooltip-label" ></div></div>';
+				}
+				
 				template += '<div class="form-group"><label>' + sanil_ssi_objects.text_colors +'</label>';
 				template += '<div class="moc-input-wrapper has-color-picker">';
 				template += '<div class="colorpicker-group"><p>' + sanil_ssi_objects.text_icon_color +'</p><input type="text" value="'+ icon_obj.icon_color +'" name="icon_color"  class="color-picker icon-color" data-alpha="true"></div>';
@@ -315,22 +344,22 @@
 			$('#selected-icons-container').append(template);
 
 
+			// should we scroll down ?
 			if( scroll_down != false ){
-
 				// scroll down
-				$("html, body").animate({ scrollTop: $(document).height() }, 500 );
-
+				$("html, body").animate( { scrollTop: $(document).height() }, 500 );
 			}
+
 
 			// delay for smoother animation
 			setTimeout(function(){
 				// initiate wp color picker
 				$('.icon-row .color-picker').wpColorPicker();
-
 			}, 500)
-			
+
 		}
 
+		// generate <style> tag and insert into <head>
 		function generate_stylesheet(icon_id, icon_color, icon_color_hover, bck_color, bck_color_hover){
 
 			var styles 		= '';
@@ -356,6 +385,7 @@
 
 		}
 
+		// replace space with underscore
 		function get_icon_id(icon){
 			return icon.replace(' ', '_');
 		}
@@ -372,7 +402,7 @@
 			})
 		}
 
-	})
+	});
 
 
 

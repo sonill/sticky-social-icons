@@ -4,8 +4,9 @@
     defined( 'ABSPATH' ) || exit;
 
     printf(
-        '<input type="checkbox"  name="%1$s" id="%1$s" value="1" %2$s %3$s />',
+        '<input type="checkbox"  name="%1$s" id="%1$s" value="1" %2$s %3$s />%4$s',
         $args['name'],
         $is_checked,
-        $attr
+        $attr,
+        esc_html( $end_label )
     );
