@@ -1,0 +1,30 @@
+{
+  "name": "sticky-social-icons",
+  "version": "1.0.0",
+  "description": "Add Sticky Social Icons to the side of your website. Choose from thousands of available icons. Sticky Social Icons is fully interactive and feature rich plugin.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sonill/sticky-social-icons.git"
+  },
+  "keywords": [
+    "Sticky",
+    "Social",
+    "Icons",
+    "Sidebar",
+    "Social Media"
+  ],
+  "author": "Sanil Shakya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sonill/sticky-social-icons/issues"
+  },
+  "homepage": "https://github.com/sonill/sticky-social-icons#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-wp-pot": "^2.4.3"
+  }
+}

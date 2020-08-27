@@ -16,7 +16,7 @@
             <?php _e( 'Icons', 'sticky-social-icons' );?> </a></li>
         </ul>
 
-        <form method="POST" action="options.php" id="sanil-ssi-form">
+        <form method="POST" action="options-general.php" id="sanil-ssi-form">
             
             <?php if( $current_tab == 'settings' ):?>
 

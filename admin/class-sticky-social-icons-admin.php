@@ -191,7 +191,7 @@ class Sticky_Social_Icons_Admin {
 
 	public function get_settings_screen_contents(){
 		$current_tab = ( isset($_GET['tabs']) ) ? $_GET['tabs'] : 'settings';
-		$tab_url = "admin.php?page=$this->settings_page_slug&tabs=";
+		$tab_url = "options-general.php?page=$this->settings_page_slug&tabs=";
 
 		ob_start();
 		require_once dirname( __FILE__ ) .'/templates/settings-screen.php';
