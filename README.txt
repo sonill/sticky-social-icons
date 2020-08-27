@@ -36,10 +36,10 @@ Note: Sticky Social Icons is not a sharing plugin.
 == Installation ==
 
 1.  Download the plugin .zip file and make note of where on your computer you downloaded it to.
-2.  In the WordPress admin (example.com/wp-admin) go to Plugins > Add New or click the “Add New” button on the main plugins screen.
-3.  On the following screen, click the “Upload Plugin” button.
-4.  Browse your computer to where you downloaded the plugin .zip file, select it and click the “Install Now” button.
-5.  After the plugin has successfully installed, click “Activate Plugin” and enjoy!
+1.  In the WordPress admin (example.com/wp-admin) go to Plugins > Add New or click the “Add New” button on the main plugins screen.
+1.  On the following screen, click the “Upload Plugin” button.
+1.  Browse your computer to where you downloaded the plugin .zip file, select it and click the “Install Now” button.
+1.  After the plugin has successfully installed, click “Activate Plugin” and enjoy!
 
 == Frequently Asked Questions ==
 
