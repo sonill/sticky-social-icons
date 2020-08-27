@@ -15,7 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Sticky Social Icons
  * Plugin URI:        http://www.sanil.com.np/sticky-social-icons
- * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
+ * Description:       Sticky Social Icons is highly customizable plugin which can display your favorite social media icons into side of the website screen.
  * Version:           1.0.0
  * Author:            Sanil Shakya
  * Author URI:        http://www.sanil.com.np

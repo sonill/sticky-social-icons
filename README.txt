@@ -1,41 +1,37 @@
 === Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
-Donate link: http://www.sanil.com.np
-Tags: comments, spam
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+Contributors: sonill
+Tags: social, sticky, icons, social media, sticky icons, sidebar icons
+Requires at least: 5.0.0
+Tested up to: 5.4
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Sticky Social Icons is one of the best and probably only plugins that displays social icons into side of your website screen. You can select your favorite social media icons and show it in the website. You can also choose which URL to open on click.
 
 == Description ==
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+Sticky Social Icons is one of the best and probably only plugins that displays social icons into side of your website screen. You can select your favorite social media icons and show it in the website. You can also choose which URL to open on click. 
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+It is a sticky container which means it will stick to the side of the screen, no matter how much you scroll up or down. It also comes with cool animation and tooltip suport.
 
-A few notes about the sections above:
+Sticky Social Icons plugin is really fast, powerful and simple to use. It has been designed to look, feel and work evenly in both larger screen and smaller mobile screens. The plugin's admin interface is really intuitive. It is easier to use for both experienced and newbie users.
 
-*   "Contributors" is a comma separated list of wp.org/wp-plugins.org usernames
-*   "Tags" is a comma separated list of tags that apply to the plugin
-*   "Requires at least" is the lowest version that the plugin will work on
-*   "Tested up to" is the highest version that you've *successfully used to test the plugin*. Note that it might work on
-higher versions... this is just the highest one you've verified.
-*   Stable tag should indicate the Subversion "tag" of the latest stable version, or "trunk," if you use `/trunk/` for
-stable.
+Sticky Social Icons plugin comes preloaded with thousands of popular icons like Facebook, Twitter, Instagram, YouTube, WhatsApp, Pinterest and much much  more.
 
-    Note that the `readme.txt` of the stable tag is the one that is considered the defining one for the plugin, so
-if the `/trunk/readme.txt` file says that the stable tag is `4.3`, then it is `/tags/4.3/readme.txt` that'll be used
-for displaying information about the plugin.  In this situation, the only thing considered from the trunk `readme.txt`
-is the stable tag pointer.  Thus, if you develop in trunk, you can update the trunk `readme.txt` to reflect changes in
-your in-development version, without having that information incorrectly disclosed about the current stable version
-that lacks those changes -- as long as the trunk's `readme.txt` points to the correct stable tag.
+### AMAZING FEATURES
 
-    If no stable tag is provided, it is assumed that trunk is stable, but you should specify "trunk" if that's where
-you put the stable version, in order to eliminate any doubt.
+ - More than thousands of icons to choose.
+ - Sticky/floating social icons.
+ - Choose which page or URL to open on click.
+ - Choose if it should open in new tab or same tab.
+ - Enable or disable animation.
+ - Enable or disable Tool-tip support.
+ - Complete control over look and feel of the icons.
+ - Change Icon's size, width, height and colors.
+ - Choose which side of the screen to show.
+
+Note: Sticky Social Icons is not a sharing plugin.
 
 == Installation ==
 
